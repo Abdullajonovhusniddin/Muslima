@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import './App.css'
 
 const particles = Array.from({ length: 38 }, (_, index) => ({
@@ -10,8 +11,26 @@ const particles = Array.from({ length: 38 }, (_, index) => ({
 }))
 
 function App() {
+  const [isNight, setIsNight] = useState(() => localStorage.getItem('muslima-theme') === 'night')
+
+  const toggleTheme = () => {
+    setIsNight((current) => {
+      const next = !current
+      localStorage.setItem('muslima-theme', next ? 'night' : 'day')
+      return next
+    })
+  }
+
   return (
-    <main className="love-page">
+    <main className={`love-page${isNight ? ' night-mode' : ''}`}>
+      <button
+        className="theme-toggle"
+        type="button"
+        onClick={toggleTheme}
+        aria-label={isNight ? 'Switch to daytime mode' : 'Switch to nighttime mode'}
+      >
+        <span aria-hidden="true">{isNight ? '☀' : '☾'}</span>
+      </button>
       <div className="sparkles" aria-hidden="true">
         {particles.map((particle) => (
           <span
